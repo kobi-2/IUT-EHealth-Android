@@ -1,4 +1,4 @@
-package com.prodigyapps.iutehealthandroid.ui.dashboard
+package com.prodigyapps.iutehealthandroid.ui.yellow_slip
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.prodigyapps.iutehealthandroid.R
 
-class DashboardFragment : Fragment() {
+class YellowSlipFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var yellowSlipViewModel: YellowSlipViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        yellowSlipViewModel =
+                ViewModelProviders.of(this).get(YellowSlipViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_yellow_slip, container, false)
         val textView: TextView = root.findViewById(R.id.text_dashboard)
-        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
+        yellowSlipViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

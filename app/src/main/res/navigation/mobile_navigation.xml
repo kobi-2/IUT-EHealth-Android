@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.prodigyapps.iutehealthandroid.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_yellow_slip"
+        android:name="com.prodigyapps.iutehealthandroid.ui.yellow_slip.YellowSlipFragment"
+        android:label="@string/title_yellow_slip"
+        tools:layout="@layout/fragment_yellow_slip" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.prodigyapps.iutehealthandroid.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_profile"
+        android:name="com.prodigyapps.iutehealthandroid.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

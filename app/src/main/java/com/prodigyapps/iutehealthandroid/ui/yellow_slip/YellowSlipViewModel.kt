@@ -1,10 +1,10 @@
-package com.prodigyapps.iutehealthandroid.ui.dashboard
+package com.prodigyapps.iutehealthandroid.ui.yellow_slip
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DashboardViewModel : ViewModel() {
+class YellowSlipViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"
