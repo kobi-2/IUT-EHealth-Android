@@ -2,11 +2,14 @@ package com.prodigyapps.iutehealthandroid;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
+import static com.zipow.videobox.confapp.ConfMgr.getApplicationContext;
 
 
 public class MySQLCon extends AsyncTask {
@@ -18,9 +21,9 @@ public class MySQLCon extends AsyncTask {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             Log.d(TAG, "setupCon: class name done");
 
-            //here sql12353692 in url is database name, 3306 is port number
+            //here sql12357858 in url is database name, 3306 is port number
             Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12353692", "sql12353692", "NruRn74dY6");
+                    "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12357858", "sql12357858", "HtqFYX9t4G");
 //            Connection con = DriverManager.getConnection(
 //                    "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12353692?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=ConvertToNull&serverTimezone=GMT", "sql12353692", "NruRn74dY6");
             Log.d(TAG, "setupCon: connection setup done");
@@ -39,6 +42,7 @@ public class MySQLCon extends AsyncTask {
 
             con.close();
         } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Error in database: " + e, Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Exception: error in database: " + e);
 //            System.out.println("error in database: ");
 //            System.out.println(e);}
