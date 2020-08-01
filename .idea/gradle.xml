@@ -12,6 +12,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/commonlib" />
+            <option value="$PROJECT_DIR$/mobilertc" />
             <option value="$PROJECT_DIR$/mysql-connector-java-5.1.5-bin" />
           </set>
         </option>

@@ -1,3 +1,5 @@
+include ':mobilertc'
+include ':commonlib'
 include ':mysql-connector-java-5.1.5-bin'
 include ':app'
 rootProject.name = "IUT EHealth Android"
