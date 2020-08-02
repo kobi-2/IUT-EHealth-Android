@@ -1,5 +1,7 @@
 package com.prodigyapps.iutehealthandroid;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -9,10 +11,17 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import static com.zipow.videobox.confapp.ConfMgr.getApplicationContext;
-
 
 public class MySQLCon extends AsyncTask {
+
+    // @SuppressLint to avoid leak
+//    @SuppressLint("StaticFieldLeak")
+//    private Context context;
+//
+//    MySQLCon(Context context){
+//        this.context = context;
+//    }
+
 
     public void setupCon() {
         String TAG = "MysqlCon";
@@ -26,6 +35,8 @@ public class MySQLCon extends AsyncTask {
                     "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12357858", "sql12357858", "HtqFYX9t4G");
 //            Connection con = DriverManager.getConnection(
 //                    "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12353692?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=ConvertToNull&serverTimezone=GMT", "sql12353692", "NruRn74dY6");
+
+//            Toast.makeText(context, "Successful Database Connection", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "setupCon: connection setup done");
 
             Statement stmt = con.createStatement();
@@ -42,7 +53,7 @@ public class MySQLCon extends AsyncTask {
 
             con.close();
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error in database: " + e, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "Error in database: " + e, Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Exception: error in database: " + e);
 //            System.out.println("error in database: ");
 //            System.out.println(e);}
