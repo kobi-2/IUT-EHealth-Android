@@ -1,40 +1,44 @@
 package com.prodigyapps.iutehealthandroid.ui.home
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.service.media.MediaBrowserService
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.prodigyapps.iutehealthandroid.R
 
 
-const val TAG = "HomeFragement"
+const val TAG = "HomeFragment"
 
 
 class HomeFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var root : View;
+
+    var imageViewUpload: ImageView? = null
+    var imageViewFetch: ImageView? = null
+    private val PICK_IMAGE = 1
+    var imageUri: Uri? = null
+
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
 
+        root = inflater.inflate(R.layout.fragment_home, container, false)
 
 
         root.findViewById<Button>(R.id.buttonZoomCall).setOnClickListener { view ->
@@ -62,8 +66,77 @@ class HomeFragment : Fragment() {
             Navigation.findNavController(it).navigate(R.id.action_navigation_home_to_setAppointmentFragment)
         }
 
+        imageViewUpload = root.findViewById(R.id.imageView_upload)
+//        imageViewUpload?.setImageResource(R.drawable.popeye)
+
+        imageViewFetch = root.findViewById(R.id.imageView_fetch)
+        imageViewFetch?.setImageResource(R.drawable.popeye)
+
+        root.findViewById<Button>(R.id.button_refund).setOnClickListener {
+            Log.d(TAG, "onCreateView: Refund Button Pressed")
+
+            openGallery();
+
+        }
 
         return root
+
+
+    }
+
+
+    private fun openGallery() {
+        val gallery =
+            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        startActivityForResult(gallery, PICK_IMAGE)
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+
+        super.onActivityResult(requestCode, resultCode, data)
+
+
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
+            if (data != null) {
+                imageUri = data.data
+            }
+            imageViewUpload!!.setImageURI(imageUri)
+
+//            imageUri?.path
+
+            Log.d(TAG, "onActivityResult: imageUri: $imageUri")
+            Log.d(TAG, "onActivityResult: imgeUri path: ${imageUri?.path}")
+
+
+            /*
+
+            // probably don't need these
+
+            val uriPathHelper = URIPathHelper()
+            val filePath = imageUri?.let { uriPathHelper.getPath(requireContext(), it) }
+
+            val bitmap =
+                MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
+
+            val inputStream = imageUri?.let { requireContext().contentResolver.openInputStream(it) }
+
+             */
+
+
+            if( imageUri != null){
+                Log.d(TAG, "onCreate: ImageUploadSQLConn starting")
+                val mySQLCon = ImageUploadSQLConn(requireContext(), imageUri)
+//                val mySQLCon = ImageUploadSQLConn(requireContext(), bitmap)
+                mySQLCon.execute()
+                imageViewUpload!!.setImageURI(imageUri)
+            }
+            Log.d(TAG, "onCreate: ImageUploadSQLConn finished")
+
+        }
 
 
     }
