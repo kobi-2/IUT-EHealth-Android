@@ -19,13 +19,9 @@ class YellowSlipFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        yellowSlipViewModel =
-                ViewModelProviders.of(this).get(YellowSlipViewModel::class.java)
+
         val root = inflater.inflate(R.layout.fragment_yellow_slip, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        yellowSlipViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+
         return root
     }
 }

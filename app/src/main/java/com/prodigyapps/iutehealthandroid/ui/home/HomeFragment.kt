@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.service.media.MediaBrowserService
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import com.prodigyapps.iutehealthandroid.R
 
@@ -60,7 +58,7 @@ class HomeFragment : Fragment() {
             startActivity(browserIntent)
         }
 
-        root.findViewById<Button>(R.id.buttonSetAppointment).setOnClickListener{
+        root.findViewById<Button>(R.id.textView_Reason).setOnClickListener{
             Log.d(TAG, "onCreateView: SetAppointmentButton Pressed")
 
             Navigation.findNavController(it).navigate(R.id.action_navigation_home_to_setAppointmentFragment)
