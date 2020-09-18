@@ -17,9 +17,9 @@
 
     <fragment
         android:id="@+id/navigation_yellow_slip"
-        android:name="com.prodigyapps.iutehealthandroid.ui.yellow_slip.YellowSlipFragment"
+        android:name="com.prodigyapps.iutehealthandroid.ui.history.HistoryFragment"
         android:label="@string/title_yellow_slip"
-        tools:layout="@layout/fragment_yellow_slip" />
+        tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/navigation_profile"

@@ -18,7 +18,7 @@ import androidx.annotation.Nullable;
 import java.sql.*;
 import java.io.*;
 
-public class ImageUploadSQLConn extends AsyncTask {
+public class ImageRefundUploadSQLConn extends AsyncTask {
 
     // @SuppressLint to avoid leak
 //    @SuppressLint("StaticFieldLeak")
@@ -35,7 +35,7 @@ public class ImageUploadSQLConn extends AsyncTask {
     private Context context;
     private InputStream inputStream;
 
-    ImageUploadSQLConn(Context context, @Nullable Uri uri) throws FileNotFoundException {
+    ImageRefundUploadSQLConn(Context context, @Nullable Uri uri) throws FileNotFoundException {
 
         this.context = context;
 
@@ -144,6 +144,12 @@ public class ImageUploadSQLConn extends AsyncTask {
         return uploadStatus;
     }
 
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        Toast.makeText(context, "Uploading Image", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onPostExecute(Object o) {

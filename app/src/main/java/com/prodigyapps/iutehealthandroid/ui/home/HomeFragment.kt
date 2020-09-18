@@ -64,7 +64,13 @@ class HomeFragment : Fragment() {
             Navigation.findNavController(it).navigate(R.id.action_navigation_home_to_setAppointmentFragment)
         }
 
-        imageViewUpload = root.findViewById(R.id.imageView_upload)
+        root.findViewById<Button>(R.id.buttonPhoneCall).setOnClickListener{
+            Log.d(TAG, "onCreateView: phone call button Pressed")
+            Toast.makeText(context, "Calling IUT Medical Center", Toast.LENGTH_SHORT).show()
+            makeCall()
+        }
+
+        imageViewUpload = root.findViewById(R.id.imageView_fetch)
 //        imageViewUpload?.setImageResource(R.drawable.popeye)
 
         imageViewFetch = root.findViewById(R.id.imageView_fetch)
@@ -87,6 +93,13 @@ class HomeFragment : Fragment() {
     }
 
 
+    private fun makeCall(){
+        val callIntent = Intent(Intent.ACTION_DIAL)
+        Log.d(TAG, "makeCall: call intent created")
+        callIntent.data = Uri.parse("tel:01732923186")
+        Log.d(TAG, "makeCall: call date set")
+        startActivity(callIntent)
+    }
 
     private fun openGallery() {
         val gallery =
@@ -132,7 +145,11 @@ class HomeFragment : Fragment() {
 
             if( imageUri != null){
                 Log.d(TAG, "onCreate: ImageUploadSQLConn starting")
-                val mySQLCon = ImageUploadSQLConn(requireContext(), imageUri)
+                val mySQLCon =
+                    ImageRefundUploadSQLConn(
+                        requireContext(),
+                        imageUri
+                    )
 //                val mySQLCon = ImageUploadSQLConn(requireContext(), bitmap)
                 mySQLCon.execute()
                 imageViewUpload!!.setImageURI(imageUri)
