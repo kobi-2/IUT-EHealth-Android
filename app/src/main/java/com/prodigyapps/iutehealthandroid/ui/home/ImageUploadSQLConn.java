@@ -69,26 +69,29 @@ public class ImageUploadSQLConn extends AsyncTask {
 
             //here sql12357858 in url is database name, 3306 is port number
             Connection myConn = DriverManager.getConnection(
-                    "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12357858", "sql12357858", "HtqFYX9t4G");
+                    "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12359105", "sql12359105", "XsBjh9d1MD");
 
             Log.d(TAG, "setupCon: connection setup done");
 
 
 
-            String query = "SELECT COUNT(*) from billdatabase WHERE id=?";
+            String query = "SELECT MAX(BillNo) from billdatabase";
             PreparedStatement pst = myConn.prepareStatement(query);
-            pst.setString(1,"1");
             ResultSet rs = pst.executeQuery();
             rs.next();
-            int last_billNo = rs.getInt("COUNT(*)");
+            int last_billNo = rs.getInt("MAX(BillNo)");
             rs.close();
+
 
             Log.d(TAG, "ImageUploadSQLConn: last_billNo: " + last_billNo);
 
 
+            String query2 = "INSERT into billdatabase (BillNo,id,image,amount) values (?,?,?,?)";
+            pst = myConn.prepareStatement(query2);
+            /*
             String query2 = "INSERT into billdatabase (BillNo,id,image) values (?,?,?)";
             pst = myConn.prepareStatement(query2);
-
+            */
 
 
            /*
@@ -106,9 +109,11 @@ public class ImageUploadSQLConn extends AsyncTask {
             */
 
             pst.setString(1,Integer.toString(last_billNo+1));
-            pst.setString(2,"1");
+            //TODO: put actual user id
+            pst.setString(2,"170041003");
 //            pst.setBinaryStream(3,(InputStream)fis,(int)file.length());
             pst.setBinaryStream(3,inputStream,inputStream.available());
+            pst.setString(4,"0");
             pst.execute();
 
             Log.d(TAG, "ImageUploadSQLConn: ended");
@@ -117,8 +122,6 @@ public class ImageUploadSQLConn extends AsyncTask {
             myConn.close();
 
             Log.d(TAG, "ImageUploadSQLConn: connection closed");
-
-//            Toast.makeText(context, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
 
             uploadStatus = true;
 
@@ -147,7 +150,9 @@ public class ImageUploadSQLConn extends AsyncTask {
         super.onPostExecute(o);
 
         if(o.equals(new Boolean(true))){
-            Toast.makeText(context, "Image Uploaded successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
+        }else if(o.equals(new Boolean(false))){
+            Toast.makeText(context, "Image Uploaded Failed. Please, Try Again!", Toast.LENGTH_SHORT).show();
         }
 
     }

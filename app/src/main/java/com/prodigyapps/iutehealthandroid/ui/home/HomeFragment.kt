@@ -22,7 +22,7 @@ const val TAG = "HomeFragment"
 
 class HomeFragment : Fragment() {
 
-    private lateinit var root : View;
+    private lateinit var root : View
 
     var imageViewUpload: ImageView? = null
     var imageViewFetch: ImageView? = null
@@ -68,19 +68,24 @@ class HomeFragment : Fragment() {
 //        imageViewUpload?.setImageResource(R.drawable.popeye)
 
         imageViewFetch = root.findViewById(R.id.imageView_fetch)
-        imageViewFetch?.setImageResource(R.drawable.popeye)
+        //imageViewFetch?.setImageResource(R.drawable.popeye)
 
         root.findViewById<Button>(R.id.button_refund).setOnClickListener {
             Log.d(TAG, "onCreateView: Refund Button Pressed")
 
-            openGallery();
+            openGallery()
+        }
 
+        root.findViewById<Button>(R.id.button_prescription).setOnClickListener {
+            Log.d(TAG, "onCreateView: Prescription Button Pressed")
+
+            fetchPrescriptionImage()
         }
 
         return root
 
-
     }
+
 
 
     private fun openGallery() {
@@ -136,6 +141,15 @@ class HomeFragment : Fragment() {
 
         }
 
-
     }
+
+
+    private fun fetchPrescriptionImage(){
+        //TODO: Probably dont need to pass imageuri
+        val mySQLCon = ImageFetchSQLConn(requireContext(), root, imageViewFetch)
+        mySQLCon.execute()
+        //TODO: <code> imageViewFetch!!.setImageURI(imageUri)
+    }
+
+
 }

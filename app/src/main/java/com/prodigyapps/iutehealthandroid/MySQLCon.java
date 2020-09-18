@@ -32,7 +32,7 @@ public class MySQLCon extends AsyncTask {
 
             //here sql12357858 in url is database name, 3306 is port number
             Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12357858", "sql12357858", "HtqFYX9t4G");
+                    "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12359105", "sql12359105", "XsBjh9d1MD");
 //            Connection con = DriverManager.getConnection(
 //                    "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12353692?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=ConvertToNull&serverTimezone=GMT", "sql12353692", "NruRn74dY6");
 

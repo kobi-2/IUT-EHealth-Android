@@ -1,13 +1,21 @@
 package com.prodigyapps.iutehealthandroid.ui.home;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.prodigyapps.iutehealthandroid.R;
+
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,6 +33,23 @@ import java.sql.ResultSet;
 //import java.sql.PreparedStatement;
 //import java.sql.ResultSet;
 
+
+class ImageFetchData{
+    boolean imageFetchedSuccessfully;
+    Bitmap bmp;
+    ImageFetchData(){
+        imageFetchedSuccessfully = false;
+        bmp = null;
+    }
+
+    /*
+    ImageFetchData(boolean b){
+        imageFetchedSuccessfully = b;
+    }
+     */
+}
+
+
 public class ImageFetchSQLConn extends AsyncTask {
 
     // @SuppressLint to avoid leak
@@ -40,16 +65,22 @@ public class ImageFetchSQLConn extends AsyncTask {
     private FileInputStream fis;
     private File file;
     private Context context;
-    private InputStream inputStream;
+    private View root;
+    private ImageFetchData imageFetchData;
+    private ImageView imageViewFetch;
 
-    ImageFetchSQLConn(Context context, ImageView imageView, @Nullable Uri uri) throws FileNotFoundException {
+    ImageFetchSQLConn(Context context, View root , ImageView imageView) throws FileNotFoundException {
 
         this.context = context;
+        this.root = root;
+        this.imageViewFetch = imageView;
+        //imageViewFetch.setImageResource(R.drawable.popeye);
+
+        imageFetchData = new ImageFetchData();
 
         Log.d(TAG, "ImageFetchsqlConn: constructor called");
-        Log.d(TAG, "ImagefetchsqlConn: in the constructor Uri: "+ uri);
-
-        inputStream =  context.getContentResolver().openInputStream(uri);
+//        Log.d(TAG, "ImagefetchsqlConn: in the constructor Uri: "+ uri);
+//        inputStream =  context.getContentResolver().openInputStream(uri);
 
 
         /*
@@ -65,8 +96,9 @@ public class ImageFetchSQLConn extends AsyncTask {
          */
 
     }
+    private InputStream inputStream;
 
-    public void setupCon() {
+    public ImageFetchData setupCon() {
 
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -75,75 +107,105 @@ public class ImageFetchSQLConn extends AsyncTask {
 
             //here sql12357858 in url is database name, 3306 is port number
             Connection myConn = DriverManager.getConnection(
-                    "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12357858", "sql12357858", "HtqFYX9t4G");
+                    "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12359105", "sql12359105", "XsBjh9d1MD");
 
             Log.d(TAG, "setupCon: connection setup done");
 
 
-
-            String query = "SELECT COUNT(*) from billdatabase WHERE id=?";
+            String query = "SELECT BillNo,image from billdatabase WHERE billNo = ? AND id=? ";
             PreparedStatement pst = myConn.prepareStatement(query);
+            //TODO: set actual bill no, and id...
+//            pst.setString(1,BillNumber);
+//            pst.setString(2,userSession.getUsername());
             pst.setString(1,"1");
+            pst.setString(2,"170041003");
+
             ResultSet rs = pst.executeQuery();
-            rs.next();
-            int last_billNo = rs.getInt("COUNT(*)");
-            rs.close();
 
-            Log.d(TAG, "ImageUploadSQLConn: last_billNo: " + last_billNo);
+            Log.d(TAG, "ImageFetchSQLConn: image fetching query executed. now moving onto extracting the value to inputstream ");
+
+            InputStream inputStream = null;
+            // TODO: refactor as to fit mine...
+            if(rs.next()){
+                Log.d(TAG, "image fetch...query has result!");
+
+                inputStream = rs.getBinaryStream("image");
+
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+                Bitmap bmp = BitmapFactory.decodeStream(bufferedInputStream);
+//                imageViewFetch.setImageBitmap(bmp);
+
+                imageFetchData.imageFetchedSuccessfully = true;
+                imageFetchData.bmp = bmp;
+
+                Log.d(TAG, "ImageFetchSQLConn: done setting image to imageview after fetching");
 
 
-            String query2 = "INSERT into billdatabase (BillNo,id,image) values (?,?,?)";
-            pst = myConn.prepareStatement(query2);
+                /*
+                OutputStream os = new FileOutputStream(new File("refundImage.jpg"));
+                byte[] content = new byte[1024];
+                int size = 0;
+                while((size = is.read(content))!=-1){
+                    os.write(content,0,size);
+                }
+                is.close();
+                os.close();
+                image2 = new Image("file:refundImage.jpg",400,500,true,true);
+                refundImage.setImage(image2);
+                refundImage.setFitHeight(300);
+                refundImage.setFitWidth(400);
+                refundImage.setPreserveRatio(true);
+                */
 
-
-
-           /*
-           // I Don't think we need this
-
-            try {
-//                file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES))
-                fis = new FileInputStream( file);
-//                fis = new FileInputStream(String.valueOf(inputStream));
-            } catch (FileNotFoundException e) {
-
-                Log.d(TAG, "setupCon: file error!! " + e);
+            }else {
+                Log.d(TAG, "ImageFetchSQLConn: image fetched from database FAILED!!");
             }
 
-            */
+            pst.close();
+            rs.close();
 
-            pst.setString(1,Integer.toString(last_billNo+1));
-            pst.setString(2,"1");
-//            pst.setBinaryStream(3,(InputStream)fis,(int)file.length());
-            pst.setBinaryStream(3,inputStream,inputStream.available());
-            pst.execute();
-
-            Log.d(TAG, "ImageUploadSQLConn: ended");
+            Log.d(TAG, "ImageFetchSQLConn: image fetched from database");
 
 
             myConn.close();
-
-            Log.d(TAG, "ImageUploadSQLConn: connection closed");
-
-//            Toast.makeText(context, "Image Uploaded Successfully", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "ImageFetchSQLConn: connection closed");
 
 
         } catch (Exception e) {
             Log.d(TAG, "Exception: error in database: " + e);
         }
 
-
+        return imageFetchData;
     }
 
 
     @Override
     protected Object doInBackground(Object[] objects) {
 
-        Log.d(TAG, "ImageUploadSQLConn: background starting");
+        Log.d(TAG, "ImageFetchSQLConn: background starting");
 
-        setupCon();
-        return null;
+        return setupCon();
     }
 
+
+    @Override
+    protected void onPostExecute(Object o) {
+        super.onPostExecute(o);
+
+        ImageFetchData imageFetchData = (ImageFetchData) o;
+
+        if(imageFetchData.imageFetchedSuccessfully){
+
+            Toast.makeText(context, "Image Collected Successfully", Toast.LENGTH_SHORT).show();
+            imageViewFetch.setImageBitmap(imageFetchData.bmp);
+
+        }else if(!imageFetchData.imageFetchedSuccessfully){
+            Toast.makeText(context, "Image Collection Failed. Please, Try Again!", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context, "An Error Occurred [ImageFetchSQLConn.java onPostExecute()]", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
 }
 
