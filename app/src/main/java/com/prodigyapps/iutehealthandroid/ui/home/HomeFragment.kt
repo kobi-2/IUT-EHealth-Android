@@ -11,10 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.prodigyapps.iutehealthandroid.R
+import org.w3c.dom.Text
 
 
 const val TAG = "HomeFragment"
@@ -24,6 +26,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var root : View
 
+    var textView: TextView ? = null
     var imageViewUpload: ImageView? = null
     var imageViewFetch: ImageView? = null
     private val PICK_IMAGE = 1
@@ -38,6 +41,8 @@ class HomeFragment : Fragment() {
 
         root = inflater.inflate(R.layout.fragment_home, container, false)
 
+        textView = root.findViewById(R.id.textView_nextAppointment)
+        CheckAppointmentAsync(requireContext(), root, textView).execute()
 
         root.findViewById<Button>(R.id.buttonZoomCall).setOnClickListener { view ->
             Log.d(TAG, "onCreateView: Zoom Button Pressed")
@@ -58,7 +63,7 @@ class HomeFragment : Fragment() {
             startActivity(browserIntent)
         }
 
-        root.findViewById<Button>(R.id.textView_Reason).setOnClickListener{
+        root.findViewById<Button>(R.id.button_setAppointment).setOnClickListener{
             Log.d(TAG, "onCreateView: SetAppointmentButton Pressed")
 
             Navigation.findNavController(it).navigate(R.id.action_navigation_home_to_setAppointmentFragment)
@@ -87,6 +92,8 @@ class HomeFragment : Fragment() {
 
             fetchPrescriptionImage()
         }
+
+
 
         return root
 

@@ -12,7 +12,7 @@
 
 
         <TextView
-            android:id="@+id/textView_Prescriptions"
+            android:id="@+id/textView_Appointment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

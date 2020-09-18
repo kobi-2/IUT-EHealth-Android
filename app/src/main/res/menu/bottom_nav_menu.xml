@@ -9,7 +9,7 @@
     <item
         android:id="@+id/navigation_yellow_slip"
         android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_yellow_slip" />
+        android:title="@string/title_history" />
 
     <item
         android:id="@+id/navigation_profile"

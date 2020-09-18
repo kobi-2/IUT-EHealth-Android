@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/navigation_yellow_slip"
         android:name="com.prodigyapps.iutehealthandroid.ui.history.HistoryFragment"
-        android:label="@string/title_yellow_slip"
+        android:label="@string/title_history"
         tools:layout="@layout/fragment_history" />
 
     <fragment
@@ -30,5 +30,9 @@
         android:id="@+id/setAppointmentFragment"
         android:name="com.prodigyapps.iutehealthandroid.ui.set_appointment.SetAppointmentFragment"
         android:label="Set Appointment"
-        tools:layout="@layout/fragment_set_appointment" />
+        tools:layout="@layout/fragment_set_appointment" >
+        <action
+            android:id="@+id/action_setAppointmentFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
 </navigation>

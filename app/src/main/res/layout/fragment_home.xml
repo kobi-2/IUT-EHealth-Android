@@ -35,7 +35,7 @@
 
 
             <TextView
-                android:id="@+id/textView_Prescriptions"
+                android:id="@+id/textView_Appointment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -47,18 +47,19 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView_date"
+                android:id="@+id/textView_nextAppointment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="TODO: Appointment Date Goes Here"
-                android:textSize="16sp"
+                android:text="No Appointment"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_Prescriptions" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_Appointment" />
 
             <Button
-                android:id="@+id/textView_Reason"
+                android:id="@+id/button_setAppointment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -74,7 +75,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_date"
+                app:layout_constraintTop_toBottomOf="@+id/textView_nextAppointment"
                 app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
