@@ -117,8 +117,8 @@ public class PrescriptionFetchSQLConn extends AsyncTask {
 
             pst.close();
             rs.close();
-
             myConn.close();
+
             Log.d(TAG, "PrescriptionFetchSQLConn: all connection closed");
 
 

@@ -7,7 +7,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.prodigyapps.iutehealthandroid.R;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -30,27 +33,44 @@ import java.sql.ResultSet;
 
 public class ProfileFetchAsync extends AsyncTask {
 
-    // @SuppressLint to avoid leak
-//    @SuppressLint("StaticFieldLeak")
-//    private Context context;
-//
-//    MySQLCon(Context context){
-//        this.context = context;
-//    }
 
     private String TAG = "ProfileFetchAsync";
 
 
     private Context context;
     private View root;
-    private ImageView imageViewFetch;
-    private InputStream inputStream;
+    private ImageView profPicture;
+    private Bitmap bmp;
+//    private InputStream inputStream;
+    TextView nameText, idText, deptText, ageText, bgText, contactText, emailText, resText, addressText;
+    String name, id, dept, age, bg, contact, email, res, address;
 
-    ImageFetchSQLConn(Context context, View root , ImageView imageView) throws FileNotFoundException {
+    ProfileFetchAsync(Context context, View root , ImageView imageView, TextView nameText, TextView idText, TextView deptText, TextView ageText, TextView bgText, TextView contactText, TextView emailText, TextView resText, TextView addressText) throws FileNotFoundException {
 
         this.context = context;
         this.root = root;
-        this.imageViewFetch = imageView;
+        this.profPicture = imageView;
+        this.nameText = nameText;
+        this.idText = idText;
+        this.deptText = deptText;
+        this.ageText = ageText;
+        this.bgText = bgText;
+        this.contactText = contactText;
+        this.emailText = emailText;
+        this.resText = resText;
+        this.addressText = addressText;
+
+        name = "";
+        id = "";
+        dept = "";
+        age = "";
+        bg = "";
+        contact = "";
+        email = "";
+        res = "";
+        address = "";
+
+        bmp = null;
 
         Log.d(TAG, "constructor called");
     }
@@ -71,7 +91,7 @@ public class ProfileFetchAsync extends AsyncTask {
             Log.d(TAG, "setupCon: connection setup done");
 
 
-            String query = "SELECT studentname, studentage, studentbg, studentid, studentdept, studentcontact, studentemail, studentres, studentaddtess, image from userstudentinfo where studentid=? ";
+            String query = "SELECT studentname, studentage, studentbg, studentid, studentdept, studentcontact, studentemail, studentres, studentaddress, image from userstudentinfo where studentid=? ";
             PreparedStatement pst = myConn.prepareStatement(query);
             //TODO: set actual bill no, and id...
             pst.setString(1,"170041003");
@@ -79,21 +99,29 @@ public class ProfileFetchAsync extends AsyncTask {
             ResultSet rs = pst.executeQuery();
 
             InputStream inputStream = null;
-            // TODO: refactor as to fit mine...
             if(rs.next()){
                 Log.d(TAG, "query successful");
 
                 inputStream = rs.getBinaryStream("image");
 
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-                Bitmap bmp = BitmapFactory.decodeStream(bufferedInputStream);
-//                imageViewFetch.setImageBitmap(bmp);
+                bmp = BitmapFactory.decodeStream(bufferedInputStream);
+//                profPicture.setImageBitmap(bmp);
 
-                imageFetchData.imageFetchedSuccessfully = true;
-                imageFetchData.bmp = bmp;
+//                imageFetchData.imageFetchedSuccessfully = true;
+//                imageFetchData.bmp = bmp;
 
-                Log.d(TAG, "ImageFetchSQLConn: done setting image to imageview after fetching");
+                name = rs.getString("studentname");
+                id = rs.getString("studentid");
+                dept = rs.getString("studentdept");
+                age = rs.getString("studentage");
+                bg = rs.getString("studentbg");
+                contact = rs.getString("studentcontact");
+                email = rs.getString("studentemail");
+                res = rs.getString("studentres");
+                address = rs.getString("studentaddress");
 
+                flag = true;
 
                 /*
                 OutputStream os = new FileOutputStream(new File("refundImage.jpg"));
@@ -143,17 +171,20 @@ public class ProfileFetchAsync extends AsyncTask {
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
 
-        ImageFetchData imageFetchData = (ImageFetchData) o;
 
-        if(imageFetchData.imageFetchedSuccessfully){
+        if(o.equals(new Boolean(true))) {
 
-            Toast.makeText(context, "Image Collected Successfully", Toast.LENGTH_SHORT).show();
-            imageViewFetch.setImageBitmap(imageFetchData.bmp);
+            profPicture.setImageBitmap(bmp);
+            nameText.setText(name);
+            idText.setText(id);
+            deptText.setText(dept);
+            ageText.setText(age);
+            bgText.setText(bg);
+            contactText.setText(contact);
+            emailText.setText(email);
+            resText.setText(res);
+            addressText.setText(address);
 
-        }else if(!imageFetchData.imageFetchedSuccessfully){
-            Toast.makeText(context, "Image Collection Failed. Please, Try Again!", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(context, "An Error Occurred [ImageFetchSQLConn.java onPostExecute()]", Toast.LENGTH_SHORT).show();
         }
 
     }

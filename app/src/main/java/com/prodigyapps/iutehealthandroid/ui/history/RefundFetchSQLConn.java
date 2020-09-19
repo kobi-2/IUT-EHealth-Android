@@ -118,8 +118,8 @@ public class RefundFetchSQLConn extends AsyncTask {
 
             pst.close();
             rs.close();
-
             myConn.close();
+
             Log.d(TAG, "RefundFetchSQLConn: all connection closed");
 
 
